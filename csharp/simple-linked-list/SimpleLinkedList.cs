@@ -7,42 +7,41 @@ public class SimpleLinkedList<T> : IEnumerable<T>
 {
     public SimpleLinkedList(T value)
     {
-        throw new NotImplementedException("You need to implement this function.");
+        Value = value;
     }
 
-    public SimpleLinkedList(IEnumerable<T> values)
+    public SimpleLinkedList(IEnumerable<T> values) : this(values.First())
     {
-        throw new NotImplementedException("You need to implement this function.");
+        foreach (var value in values.Skip(1))
+        {
+            Add(value);
+        }
     }
 
-    public T Value 
-    { 
-        get
-        {
-            throw new NotImplementedException("You need to implement this function.");
-        } 
-    }
-
-    public SimpleLinkedList<T> Next
-    { 
-        get
-        {
-            throw new NotImplementedException("You need to implement this function.");
-        } 
-    }
+    public T Value { get; }
+    public SimpleLinkedList<T> Next { get; private set; }
 
     public SimpleLinkedList<T> Add(T value)
     {
-        throw new NotImplementedException("You need to implement this function.");
+        var current = this;
+        while (current.Next != null)
+        {
+            current = current.Next;
+        }
+
+        current.Next = new SimpleLinkedList<T>(value);
+        return this;
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        throw new NotImplementedException("You need to implement this function.");
+        var current = this;
+        while (current != null)
+        {
+            yield return current.Value;
+            current = current.Next;
+        }
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        throw new NotImplementedException("You need to implement this function.");
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
