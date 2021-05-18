@@ -3,35 +3,58 @@
 public class CircularBuffer<T>
 {
     private T[] array;
+    int base_point; 
     int head;
-    int size; 
+    int tail;
+    int length;
+    int count; 
     public CircularBuffer(int capacity)
     {
         array = new T[capacity];
-        size = 0; 
+        base_point = 0;
+        head = 0;
+        tail = 0;
+        count = 0;
+        length = capacity; 
     }
-
     public T Read()
     {
-        if(size == 0)
+        if(count == 0)
         {
-            throw new InvalidOperationException("You need to implement this function.");
+            throw new InvalidOperationException("Empty buffer, cannot read from, it");
         }
-        return array[0];
+        int old_tail = tail;
+        tail++;
+        tail = tail % length;
+        count = count - 1; 
+        return array[old_tail];
     }
 
     public void Write(T value)
     {
-        size++;
+        if(count == length)
+        {
+            throw new InvalidOperationException("Empty buffer, cannot read from, it");
+        } 
+        array[head] = value;
+        this.head++;
+        head = head % length;
+        count = count + 1; 
     }
 
     public void Overwrite(T value)
     {
-        throw new NotImplementedException("You need to implement this function.");
+        array[tail] = value; 
     }
 
     public void Clear()
     {
-        throw new NotImplementedException("You need to implement this function.");
+        tail = 0;
+        head = 0;
+        count = 0; 
+        for(int i = 0; i< array.Length; i++)
+        {
+            array[i] = default(T); 
+        }
     }
 }
