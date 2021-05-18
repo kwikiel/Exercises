@@ -34,7 +34,7 @@ public class CircularBuffer<T>
     {
         if(count == length)
         {
-            throw new InvalidOperationException("Empty buffer, cannot read from, it");
+            throw new InvalidOperationException("Full buffer, cannot");
         } 
         array[head] = value;
         this.head++;
@@ -44,7 +44,16 @@ public class CircularBuffer<T>
 
     public void Overwrite(T value)
     {
-        array[tail] = value; 
+        if(count < length)
+        {
+            Write(value);
+        }
+        else {
+            array[tail] = value;
+            tail++;
+            tail = tail % length;
+        }
+
     }
 
     public void Clear()
